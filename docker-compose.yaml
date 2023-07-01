@@ -2,22 +2,6 @@ version: '3.7'
 
 services:
 
-  caddy:
-    container_name: caddy
-    image: caddy:2-alpine
-    network_mode: host
-    volumes:
-      - ./Caddyfile:/etc/caddy/Caddyfile:ro
-      - caddy-data:/data:rw
-      - caddy-config:/config:rw
-    environment:
-      - SEARXNG_HOSTNAME=${SEARXNG_HOSTNAME:-http://localhost:80}
-      - SEARXNG_TLS=${LETSENCRYPT_EMAIL:-internal}
-    cap_drop:
-      - ALL
-    cap_add:
-      - NET_BIND_SERVICE
-
   redis:
     container_name: redis
     image: "redis:alpine"
@@ -39,7 +23,7 @@ services:
     networks:
       - searxng
     ports:
-     - "127.0.0.1:8080:8080"
+     - "127.0.0.1:8001:8080"
     volumes:
       - ./searxng:/etc/searxng:rw
     environment:
@@ -59,7 +43,3 @@ networks:
   searxng:
     ipam:
       driver: default
-
-volumes:
-  caddy-data:
-  caddy-config:
